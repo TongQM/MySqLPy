@@ -47,14 +47,20 @@ def getuserinfo(id):  # TODO need to warp in to the login activity
     return {"reg_time": reg_time, "bio": bio}
 
 
-def getactivity(id):  # get userid return user activity
+def getcollection(id):  # get userid return user activity
     db = pymysql.connect(_host, _port, _sql_user, _sql_password, _sql_password)
     cursor = db.cursor()
     # TODO add sql line in hear
     sql = ""
     # End
     cursor.execute(sql)
+    # get user collention
+    results = cursor.fetchall()
+    for row in results:
+        user_id = row[0]
+        activity_id = row[1]
     db.close()
+    return {"user_id": user_id, "activity_id": activity_id}
 
 
 def restoreuser(useremail):  # check whether
