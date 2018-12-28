@@ -32,7 +32,7 @@ def addactivity(infodict):  # add activity into the
     db.close()
 
 
-def delactivity(id):  # id is course_id
+def delactivity(id):  # id is activity_id
     db = pymysql.connect(_host, _port, _sql_user, _sql_password, _sql_password)
     cursor = db.cursor()
     # TODO add sql line in hear

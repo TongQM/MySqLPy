@@ -11,7 +11,7 @@ _database = database.getdatabase()
 
 
 # get username:string,password:string,useremail:string, return id
-def register(username, password, useremail):
+def register(username, password, useremail, bio, reg_time):
     db = pymysql.connect(_host, _port, _sql_user, _sql_password, _sql_password)
     cursor = db.cursor()
     # TODO add sql line in hear
