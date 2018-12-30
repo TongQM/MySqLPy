@@ -14,6 +14,7 @@ infordict is a dict that storge all needed Data
 form as: 
 {
     "name":name,
+    "teacher":teacher,
     "time":[start_time,end_time,repect],
     "level":0...5,
     "location":location,
@@ -23,20 +24,41 @@ form as:
 
 
 def addactivity(infodict):  # add activity into the
-    db = pymysql.connect(_host, _port, _sql_user, _sql_password, _sql_password)
-    cursor = db.cursor()
-    # TODO add sql line in hear
-    sql = ""
+    connection = pymysql.connect(
+        _host, _port, _sql_user, _sql_password, _sql_password)
     # End
-    cursor.execute(sql)
-    db.close()
+    try:
+        with connection.cursor() as cursor:
+            # Create a new record
+            # TODO add sql line in here
+            sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
+            cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
+
+        # !connection is not autocommit by default. So you must commit to save
+        # your changes.
+        connection.commit()
+    except Exception as e:
+        print("Wrong", e)
+    finally:
+        connection.close()
 
 
 def delactivity(id):  # id is activity_id
-    db = pymysql.connect(_host, _port, _sql_user, _sql_password, _sql_password)
-    cursor = db.cursor()
-    # TODO add sql line in hear
-    sql = ""
+    connection = pymysql.connect(
+        _host, _port, _sql_user, _sql_password, _sql_password)
     # End
-    cursor.execute(sql)
-    db.close()
+    try:
+        with connection.cursor() as cursor:
+            # Create a new record
+            # TODO add sql line in here
+            sql1 = "delete from activity where activity_id=id;"
+            sql2 = "delete from time where id in (select time from Activity where activity_id=id)"
+            sql = sql1 + sql2
+            cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
+        # !connection is not autocommit by default. So you must commit to save
+        # your changes.
+        connection.commit()
+    except Exception as e:
+        print("Wrong", e)
+    finally:
+        connection.close()
