@@ -54,7 +54,7 @@ def getcomment(id):  # ! this is act's id
         connection.close()
 
 
-def getactinfo(id):  # ! this is act's id
+def getactinfo(id):  # ! this is act's id BUG!!!!
     connection = pymysql.connect(
         _host, _port, _sql_user, _sql_password, _sql_password)
     # End

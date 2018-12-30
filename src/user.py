@@ -11,7 +11,7 @@ _database = database.getdatabase()
 
 
 # get username:string,password:string,useremail:string, return id
-def register(username, password, useremail, bio, reg_time):
+def register(login_name, username, password, useremail, bio):
     connection = pymysql.connect(
         _host, _port, _sql_user, _sql_password, _sql_password)
     # End
@@ -19,8 +19,10 @@ def register(username, password, useremail, bio, reg_time):
         with connection.cursor() as cursor:
             # Create a new record
             # TODO add sql line in here
-            sql = "INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"
-            cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
+            sql1 = "INSERT INTO `Auth` (`login_name`,`password`,`user_email`)  VALUES (%s, %s, %s)"
+            cursor.execute(sql1, (login_name, password, useremail))
+            sql2 = "INSERT INTO `User` (`user_name`, `bio`) VALUES (%s, %s)"
+            cursor.execute(sql2, (username, bio))
 
         # !connection is not autocommit by default. So you must commit to save
         # your changes.
@@ -62,10 +64,9 @@ def getuserinfo(id):  # Auth:User_id , User:id TODO need to warp in to the login
             cursor.execute(sql, (id))
             results = cursor.fetchall()
             for row in results:
-                reg_time = row[1]
-                user_name = row[2]
-                bio = row[3]
-            return {"reg_time": reg_time, "user_name": user_name, "bio": bio}
+                user_name = row[1]
+                bio = row[2]
+            return {"user_name": user_name, "bio": bio}
 
     except Exception as e:
         print("Wrong", e)
