@@ -39,10 +39,10 @@ def login(username, password):  # get username:string,password:string, return id
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-            cursor.execute(sql, ('webmaster@python.org',))
+            sql = "SELECT `Auth.user_id` FROM `Auth` WHERE `Auth.login_name` = %s AND Auth.`password` = %s"
+            cursor.execute(sql, (username, password))
             result = cursor.fetchone()
-            print(result)
+            return result
             # TODO return user_id
 
     except Exception as e:
@@ -58,11 +58,14 @@ def getuserinfo(id):  # Auth:User_id , User:id TODO need to warp in to the login
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-            cursor.execute(sql, ('webmaster@python.org',))
-            result = cursor.fetchone()
-            print(result)
-            # TODO return user_id
+            sql = "SELECT `*` FROM `User` WHERE `User`.id = %d"
+            cursor.execute(sql, (id))
+            results = cursor.fetchall()
+            for row in results:
+                reg_time = row[1]
+                user_name = row[2]
+                bio = row[3]
+            return {"reg_time": reg_time, "user_name": user_name, "bio": bio}
 
     except Exception as e:
         print("Wrong", e)
@@ -77,15 +80,11 @@ def getcollection(id):  # get userid return user activity
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-            cursor.execute(sql, ('webmaster@python.org',))
+            sql = "SELECT Collection.activity_id FROM Collection WHERE Collection.user_id = %d"
+            cursor.execute(sql, (id))
             # get user collention
-            results = cursor.fetchall()
-            for row in results:
-                user_id = row[0]
-                activity_id = row[1]
-            return {"user_id": user_id, "activity_id": activity_id}
-            # TODO return user_id
+            result = cursor.fetchone()
+            return result
 
     except Exception as e:
         print("Wrong", e)

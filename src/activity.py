@@ -9,6 +9,8 @@ _sql_user = database.getuser()
 _sql_password = database.getpassword()
 _database = database.getdatabase()
 
+#! TODO setcomment
+
 
 def setcomment(user_id, act_id, message):  # ! id is user's id message: string
     connection = pymysql.connect(
@@ -37,12 +39,15 @@ def getcomment(id):  # ! this is act's id
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
-            cursor.execute(sql, ('webmaster@python.org',))
-            result = cursor.fetchone()
-            print(result)
+            sql = "SELECT `*` FROM `Comments` WHERE `Comments.act_id` = %d"
+            cursor.execute(sql, (id))
+            results = cursor.fetchall()
+            for row in results:
+                message = row[1]
+                auth_id = row[2]
+                act_id = row[3]
             # TODO return user_id
-
+            return {"message": message, "auth_id": auth_id, "act_id": act_id}
     except Exception as e:
         print("Wrong", e)
     finally:
@@ -55,7 +60,7 @@ def getactinfo(id):  # ! this is act's id
     # End
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT * FROM `Activity` WHERE `id`=%d"
+            sql = "SELECT `*` FROM `Activity` WHERE `Activity.id`=%d"
             cursor.execute(sql, (id))
             # TODO their must a bug because time problem
             results = cursor.fetchall()

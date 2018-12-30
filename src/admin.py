@@ -51,10 +51,10 @@ def delactivity(id):  # id is activity_id
         with connection.cursor() as cursor:
             # Create a new record
             # TODO add sql line in here
-            sql1 = "delete from activity where activity_id=id;"
-            sql2 = "delete from time where id in (select time from Activity where activity_id=id)"
+            sql1 = "delete from activity where activity_id=%d;"
+            sql2 = "delete from time where id in (select time from Activity where activity_id=%d)"
             sql = sql1 + sql2
-            cursor.execute(sql, ('webmaster@python.org', 'very-secret'))
+            cursor.execute(sql, (id, id))
         # !connection is not autocommit by default. So you must commit to save
         # your changes.
         connection.commit()
